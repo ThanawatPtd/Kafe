@@ -1,15 +1,18 @@
 package ku.cs.kafe.controller;
 
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * @author Thanawat Potidet 6510450445
+ * @version 1.0
+ * @since 2024-10-17
+ */
 
 @ControllerAdvice
 public class ErrorController {
-
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus // you can specify specific status code here

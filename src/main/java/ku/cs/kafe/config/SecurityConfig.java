@@ -1,6 +1,5 @@
 package ku.cs.kafe.config;
 
-
 import ku.cs.kafe.service.UserDetailsServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,59 +12,59 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * @author Thanawat Potidet 6510450445
+ * @version 1.0
+ * @since 2024-10-17
+ */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+        @Autowired
+        private UserDetailsServiceImp userDetailsService;
 
-    @Autowired
-    private UserDetailsServiceImp userDetailsService;
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                .authorizeHttpRequests((requests) -> requests
+                                                .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                                                .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
+                                                .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
+                                                .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
+                                                .requestMatchers(
+                                                                new AntPathRequestMatcher("/menus/add"))
+                                                .hasRole("ADMIN")
+                                                .requestMatchers(
+                                                                new AntPathRequestMatcher("/categories/add"))
+                                                .hasRole("ADMIN")
+                                                .requestMatchers(
+                                                                new AntPathRequestMatcher("/admin/**"))
+                                                .hasRole("ADMIN")
+                                                .anyRequest().authenticated()) // <-- เอา semicolon ตรงบรรทัดนี้ออกด้วย
+                                .formLogin((form) -> form
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/", true)
+                                                .permitAll())
+                                .logout((logout) -> logout
+                                                .logoutUrl("/logout")
+                                                .clearAuthentication(true)
+                                                .invalidateHttpSession(true)
+                                                .deleteCookies("JSESSIONID", "remember-me")
+                                                .permitAll());
 
+                return http.build();
+        }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/signup")).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/menus/add")).hasRole("ADMIN")
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/categories/add")).hasRole("ADMIN")
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )      // <-- เอา semicolon ตรงบรรทัดนี้ออกด้วย
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-                .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .clearAuthentication(true)
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID", "remember-me")
-                        .permitAll()
-                );
+        @Bean
+        public PasswordEncoder encoder() {
+                return new BCryptPasswordEncoder(12);
+        }
 
-
-        return http.build();
-    }
-
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(12);
-    }
-
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
-    }
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+                return (web) -> web.ignoring()
+                                .requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
+        }
 }
-

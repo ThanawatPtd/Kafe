@@ -1,6 +1,5 @@
 package ku.cs.kafe.controller;
 
-
 import jakarta.validation.Valid;
 import ku.cs.kafe.request.CategoryRequest;
 import ku.cs.kafe.service.CategoryService;
@@ -12,15 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @author Thanawat Potidet 6510450445
+ * @version 1.0
+ * @since 2024-10-17
+ */
 
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {
 
-
     @Autowired
     private CategoryService categoryService;
-
 
     @GetMapping("/add")
     public String getCategoryForm(Model model) {
@@ -28,13 +30,11 @@ public class CategoryController {
         return "category-add";
     }
 
-
     @PostMapping("/add")
     public String createCategory(@Valid CategoryRequest request,
-                                 BindingResult result, Model model) {
+            BindingResult result, Model model) {
         if (result.hasErrors())
             return "category-add";
-
 
         categoryService.createCategory(request);
         return "redirect:/menus";

@@ -1,4 +1,5 @@
 package ku.cs.kafe.controller;
+
 import ku.cs.kafe.entity.Menu;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.UUID;
@@ -15,11 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @author Thanawat Potidet 6510450445
+ * @version 1.0
+ * @since 2024-10-17
+ */
 
 @Controller
 @RequestMapping("/menus")
 public class MenuController {
-
 
     @Autowired
     private MenuService menuService;
@@ -47,13 +52,11 @@ public class MenuController {
         return "menu-add";
     }
 
-
     @PostMapping("/add")
     public String createMenu(@Valid MenuRequest menu,
-                             BindingResult result, Model model) {
+            BindingResult result, Model model) {
         if (result.hasErrors())
             return "menu-add";
-
 
         menuService.createMenu(menu);
         return "redirect:/menus";

@@ -1,4 +1,5 @@
 package ku.cs.kafe.service;
+
 import java.util.UUID;
 
 import ku.cs.kafe.entity.Category;
@@ -10,13 +11,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 
+/**
+ * @author Thanawat Potidet 6510450445
+ * @version 1.0
+ * @since 2024-10-17
+ */
 
 @Service
 public class MenuService {
-
 
     @Autowired
     private MenuRepository menuRepository;
@@ -26,7 +30,6 @@ public class MenuService {
 
     @Autowired
     private ModelMapper modelMapper;
-
 
     public List<Menu> getAllMenus() {
         return menuRepository.findAll();
@@ -38,10 +41,8 @@ public class MenuService {
 
     public void createMenu(MenuRequest request) {
         Menu record = modelMapper.map(request, Menu.class);
-        Category category =
-                categoryRepository.findByName(request.getCategoryName());
+        Category category = categoryRepository.findByName(request.getCategoryName());
         record.setCategory(category);
         menuRepository.save(record);
     }
 }
-

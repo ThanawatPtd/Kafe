@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
 
+/**
+ * @author Thanawat Potidet 6510450445
+ * @version 1.0
+ * @since 2024-10-17
+ */
+
 @Controller
 public class SignupController {
 
@@ -24,10 +30,9 @@ public class SignupController {
         return "signup"; // return หน้าฟอร์ม signup.html
     }
 
-
     @PostMapping("/signup")
     public String signupUser(@Valid SignupRequest user,
-                             BindingResult result, Model model) {
+            BindingResult result, Model model) {
         if (result.hasErrors())
             return "signup";
 
